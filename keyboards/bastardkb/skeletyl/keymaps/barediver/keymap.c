@@ -21,8 +21,7 @@
 
 enum miryoku_layers {
     U_BASE,
-    U_EXTRA,
-    U_TAP,
+    _TAP,
     U_BUTTON,
     U_NAV,
     U_MOUSE,
@@ -37,7 +36,6 @@ enum miryoku_layers {
 enum {
     U_TD_BOOT,
     U_TD_U_BASE,
-    U_TD_U_EXTRA,
     U_TD_U_TAP,
     U_TD_U_BUTTON,
     U_TD_U_NAV,
@@ -61,7 +59,6 @@ void u_td_fn_boot(tap_dance_state_t *state, void *user_data) {
         }                                                                   \
     }
 U_TD_LAYER(U_BASE)
-U_TD_LAYER(U_EXTRA)
 U_TD_LAYER(U_TAP)
 U_TD_LAYER(U_BUTTON)
 U_TD_LAYER(U_NAV)
@@ -74,7 +71,6 @@ U_TD_LAYER(U_FUN)
 tap_dance_action_t tap_dance_actions[] = {
     [U_TD_BOOT]      = ACTION_TAP_DANCE_FN(u_td_fn_boot),
     [U_TD_U_BASE]    = ACTION_TAP_DANCE_FN(u_td_fn_U_BASE),
-    [U_TD_U_EXTRA]   = ACTION_TAP_DANCE_FN(u_td_fn_U_EXTRA),
     [U_TD_U_TAP]     = ACTION_TAP_DANCE_FN(u_td_fn_U_TAP),
     [U_TD_U_BUTTON]  = ACTION_TAP_DANCE_FN(u_td_fn_U_BUTTON),
     [U_TD_U_NAV]     = ACTION_TAP_DANCE_FN(u_td_fn_U_NAV),
@@ -82,7 +78,7 @@ tap_dance_action_t tap_dance_actions[] = {
     [U_TD_U_MEDIA]   = ACTION_TAP_DANCE_FN(u_td_fn_U_MEDIA),
     [U_TD_U_NUM]     = ACTION_TAP_DANCE_FN(u_td_fn_U_NUM),
     [U_TD_U_SYM]     = ACTION_TAP_DANCE_FN(u_td_fn_U_SYM),
-    [U_TD_U_FUN]     = ACTION_TAP_DANCE_FN(u_td_fn_U_FUN),
+    [U_TD_U_FUN]     = ACTION_TAP_DANCE_FN(u_td_fn_U_FUN)
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -91,14 +87,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_Q,              KC_W,         KC_F,         KC_P,             KC_B,              KC_J,              KC_L,              KC_U,            KC_Y,           KC_QUOT,
         LGUI_T(KC_A),      LALT_T(KC_R), LCTL_T(KC_S), LSFT_T(KC_T),     KC_G,              KC_M,              LSFT_T(KC_N),      LCTL_T(KC_E),    LALT_T(KC_I),   LGUI_T(KC_O),
         LT(U_BUTTON,KC_Z), ALGR_T(KC_X), KC_C,         KC_D,             KC_V,              KC_K,              KC_H,              KC_COMM,         ALGR_T(KC_DOT), LT(U_BUTTON,KC_SLSH),
-                                         LT(U_NUM,KC_ESC), LT(U_SYM,KC_TAB), LT(U_NAV,KC_SPC),  LT(U_MOUSE,KC_ENT), LT(U_FUN,KC_BSPC), LT(U_MEDIA,KC_DEL)
-    ),
-
-    [U_EXTRA] = LAYOUT_split_3x5_3(
-        KC_Q,              KC_W,         KC_E,         KC_R,             KC_T,              KC_Y,              KC_U,              KC_I,            KC_O,           KC_P,
-        LGUI_T(KC_A),      LALT_T(KC_S), LCTL_T(KC_D), LSFT_T(KC_F),     KC_G,              KC_H,              LSFT_T(KC_J),      LCTL_T(KC_K),    LALT_T(KC_L),   LGUI_T(KC_QUOT),
-        LT(U_BUTTON,KC_Z), ALGR_T(KC_X), KC_C,         KC_V,             KC_B,              KC_N,              KC_M,              KC_COMM,         ALGR_T(KC_DOT), LT(U_BUTTON,KC_SLSH),
-                                         LT(U_NUM,KC_ESC), LT(U_SYM,KC_TAB), LT(U_NAV,KC_SPC),  LT(U_MOUSE,KC_ENT), LT(U_FUN,KC_BSPC), LT(U_MEDIA,KC_DEL)
+                                         LT(U_NUM,KC_ESC), LT(U_NAV,KC_TAB), LT(U_SYM,KC_SPC),  LT(U_MOUSE,KC_ENT), LT(U_FUN,KC_BSPC), LT(U_MEDIA,KC_DEL)
     ),
 
     [U_TAP] = LAYOUT_split_3x5_3(
@@ -117,7 +106,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     // Nav: non-flip (held by left hand), inverted-T arrows on the right.
     [U_NAV] = LAYOUT_split_3x5_3(
-        TD(U_TD_BOOT), TD(U_TD_U_TAP), TD(U_TD_U_EXTRA), TD(U_TD_U_BASE), KC_NO,   KC_INS,  KC_HOME, KC_UP,   KC_END,  KC_PGUP,
+        TD(U_TD_BOOT), TD(U_TD_U_TAP), KC_NO, TD(U_TD_U_BASE), KC_NO,   KC_INS,  KC_HOME, KC_UP,   KC_END,  KC_PGUP,
         KC_LGUI,       KC_LALT,        KC_LCTL,          KC_LSFT,         KC_NO,   CW_TOGG, KC_LEFT, KC_DOWN, KC_RGHT, KC_PGDN,
         KC_NO,         KC_ALGR,        TD(U_TD_U_NUM),   TD(U_TD_U_NAV),  KC_NO,   C(KC_Y), C(KC_V), C(KC_C), C(KC_X), C(KC_Z),
                                        KC_NO,            KC_NO,           KC_NO,   KC_ENT,  KC_BSPC, KC_DEL
@@ -125,7 +114,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     // Mouse: flip (held by right hand).
     [U_MOUSE] = LAYOUT_split_3x5_3(
-        MS_WHLU, MS_WHLL, MS_UP, MS_WHLR, KC_NO,       KC_NO,   TD(U_TD_U_BASE),  TD(U_TD_U_EXTRA), TD(U_TD_U_TAP), TD(U_TD_BOOT),
+        MS_WHLU, MS_WHLL, MS_UP, MS_WHLR, KC_NO,       KC_NO,   TD(U_TD_U_BASE),  KC_NO, TD(U_TD_U_TAP), TD(U_TD_BOOT),
         MS_WHLD, MS_LEFT, MS_DOWN, MS_RGHT, KC_NO,       KC_NO,   KC_LSFT,          KC_LCTL,          KC_LALT,        KC_LGUI,
         C(KC_Z), C(KC_X), C(KC_C), C(KC_V), C(KC_Y),     KC_NO,   TD(U_TD_U_MOUSE), TD(U_TD_U_SYM),   KC_ALGR,        KC_NO,
                           MS_BTN3, MS_BTN1, MS_BTN2,     KC_NO,   KC_NO,            KC_NO
@@ -133,7 +122,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     // Media: flip (held by right hand). RGB controls mapped to RGB Matrix.
     [U_MEDIA] = LAYOUT_split_3x5_3(
-        RM_HUEU, RM_SATU, KC_VOLU, RM_VALU, RM_TOGG,     KC_NO,   TD(U_TD_U_BASE),  TD(U_TD_U_EXTRA), TD(U_TD_U_TAP), TD(U_TD_BOOT),
+        RM_HUEU, RM_SATU, KC_VOLU, RM_VALU, RM_TOGG,     KC_NO,   TD(U_TD_U_BASE),  KC_NO, TD(U_TD_U_TAP), TD(U_TD_BOOT),
         RM_NEXT, KC_MPRV, KC_VOLD, KC_MNXT, KC_NO,       KC_NO,   KC_LSFT,          KC_LCTL,          KC_LALT,        KC_LGUI,
         KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,       KC_NO,   TD(U_TD_U_MEDIA), TD(U_TD_U_FUN),   KC_ALGR,        KC_NO,
                           KC_MUTE, KC_MPLY, KC_MSTP,     KC_NO,   KC_NO,            KC_NO
@@ -141,7 +130,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     // Num: flip (held by left hand).
     [U_NUM] = LAYOUT_split_3x5_3(
-        TD(U_TD_BOOT), TD(U_TD_U_TAP), TD(U_TD_U_EXTRA), TD(U_TD_U_BASE), KC_NO,   KC_LBRC, KC_7,    KC_8,    KC_9,    KC_RBRC,
+        TD(U_TD_BOOT), TD(U_TD_U_TAP), KC_NO, TD(U_TD_U_BASE), KC_NO,   KC_LBRC, KC_7,    KC_8,    KC_9,    KC_RBRC,
         KC_LGUI,       KC_LALT,        KC_LCTL,          KC_LSFT,         KC_NO,   KC_EQL,  KC_4,    KC_5,    KC_6,    KC_SCLN,
         KC_NO,         KC_ALGR,        TD(U_TD_U_NAV),   TD(U_TD_U_NUM),  KC_NO,   KC_BSLS, KC_1,    KC_2,    KC_3,    KC_GRV,
                                        KC_NO,            KC_NO,           KC_NO,   KC_MINS, KC_0,    KC_DOT
@@ -149,7 +138,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     // Sym: flip (held by left hand).
     [U_SYM] = LAYOUT_split_3x5_3(
-        TD(U_TD_BOOT), TD(U_TD_U_TAP), TD(U_TD_U_EXTRA), TD(U_TD_U_BASE), KC_NO,   KC_LCBR, KC_AMPR, KC_ASTR, KC_LPRN, KC_RCBR,
+        TD(U_TD_BOOT), TD(U_TD_U_TAP), KC_NO, TD(U_TD_U_BASE), KC_NO,   KC_LCBR, KC_AMPR, KC_ASTR, KC_LPRN, KC_RCBR,
         KC_LGUI,       KC_LALT,        KC_LCTL,          KC_LSFT,         KC_NO,   KC_PLUS, KC_DLR,  KC_PERC, KC_CIRC, KC_COLN,
         KC_NO,         KC_ALGR,        TD(U_TD_U_MOUSE), TD(U_TD_U_SYM),  KC_NO,   KC_PIPE, KC_EXLM, KC_AT,   KC_HASH, KC_TILD,
                                        KC_NO,            KC_NO,           KC_NO,   KC_UNDS, KC_LPRN, KC_RPRN
@@ -157,7 +146,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     // Fun: non-flip (held by right hand).
     [U_FUN] = LAYOUT_split_3x5_3(
-        KC_F12, KC_F7, KC_F8, KC_F9, KC_PSCR,            KC_NO,   TD(U_TD_U_BASE),  TD(U_TD_U_EXTRA), TD(U_TD_U_TAP), TD(U_TD_BOOT),
+        KC_F12, KC_F7, KC_F8, KC_F9, KC_PSCR,            KC_NO,   TD(U_TD_U_BASE),  KC_NO, TD(U_TD_U_TAP), TD(U_TD_BOOT),
         KC_F11, KC_F4, KC_F5, KC_F6, KC_SCRL,            KC_NO,   KC_LSFT,          KC_LCTL,          KC_LALT,        KC_LGUI,
         KC_F10, KC_F1, KC_F2, KC_F3, KC_PAUS,            KC_NO,   TD(U_TD_U_FUN),   TD(U_TD_U_MEDIA), KC_ALGR,        KC_NO,
                        KC_APP, KC_SPC, KC_TAB,           KC_NO,   KC_NO,            KC_NO
@@ -187,3 +176,18 @@ bool get_chordal_hold(uint16_t tap_hold_keycode, keyrecord_t *tap_hold_record,
     }
     return get_chordal_hold_default(tap_hold_record, other_record);
 }
+
+// Flow Tap settles any tap-hold pressed within FLOW_TAP_TERM of the previous key
+// as a tap. That's right for home-row mods (no stray mods during fast alpha
+// rolls) but wrong for the thumb layer-taps: reaching for a symbol immediately
+// after a letter lands the layer key inside the flow window, forcing it to tap,
+// so the layer never engages and the symbol falls through to the base layer
+// (e.g. "!" comes out as "h"). Disable Flow Tap for layer-taps so layers fire
+// instantly; keep it for mod-taps.
+uint16_t get_flow_tap_term(uint16_t keycode, keyrecord_t *record,
+                           uint16_t prev_keycode) {
+    if (IS_QK_LAYER_TAP(keycode)) {
+        return 0;
+    }
+    return FLOW_TAP_TERM;
+

@@ -20,7 +20,9 @@
 //   the re-allowed same-hand chords resolve as holds while fast rolls stay taps.
 //   (Intentionally NOT HOLD_ON_OTHER_KEY_PRESS, which would hold "a" mid-"are".)
 // FLOW_TAP_TERM: while typing fast, settle tap-holds pressed within this window
-//   of the previous key as taps.
+//   of the previous key as taps. Applies to mod-taps only — layer-taps are
+//   exempted via get_flow_tap_term() in keymap.c so thumb layers fire instantly
+//   even mid-flow (otherwise e.g. "!" misfires as "h").
 #define CHORDAL_HOLD
 #define PERMISSIVE_HOLD
 #define FLOW_TAP_TERM 150

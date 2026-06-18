@@ -1,6 +1,5 @@
 // Copyright 2024 Derek Mackley
-// Miryoku-derived layout for the Skeletyl (Colemak-DH, flipped layers,
-// inverted-T nav, custom thumb cluster). Tuning matches upstream Miryoku.
+// Tap/hold, Auto Shift, and mouse-key tuning for the Skeletyl Colemak-DH keymap.
 
 #pragma once
 
@@ -11,7 +10,7 @@
 #define TAPPING_TERM 200
 #define QUICK_TAP_TERM 0
 
-// Modern home-row-mod tuning.
+// Home-row-mod hold detection.
 // CHORDAL_HOLD: a tap-hold key only holds when the next key is on the opposite
 //   hand (kills same-hand alpha-roll misfires). Same-hand modifier/layer chords
 //   we rely on for Hyprland (Super+Num, Super+Shift+num) are re-allowed via
@@ -19,18 +18,11 @@
 // PERMISSIVE_HOLD: deliberate holds register through a nested press+release, so
 //   the re-allowed same-hand chords resolve as holds while fast rolls stay taps.
 //   (Intentionally NOT HOLD_ON_OTHER_KEY_PRESS, which would hold "a" mid-"are".)
-// FLOW_TAP_TERM: while typing fast, settle tap-holds pressed within this window
-//   of the previous key as taps. Applies to mod-taps only — layer-taps are
-//   exempted via get_flow_tap_term() in keymap.c so thumb layers fire instantly
-//   even mid-flow (otherwise e.g. "!" misfires as "h").
+// Flow Tap is intentionally NOT used: its instant-tap-while-typing-fast behaviour
+//   demoted deliberate mods pressed right after a letter (e.g. Shift for "?").
+//   Chordal Hold already guards against stray mods without that side effect.
 #define CHORDAL_HOLD
 #define PERMISSIVE_HOLD
-#define FLOW_TAP_TERM 150
-
-// Auto Shift (non-alpha keys only)
-#define NO_AUTO_SHIFT_ALPHA
-#define AUTO_SHIFT_TIMEOUT TAPPING_TERM
-#define AUTO_SHIFT_NO_SETUP
 
 // Mouse key tuning
 #ifdef MOUSEKEY_DELAY

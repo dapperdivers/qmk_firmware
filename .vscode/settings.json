@@ -35,7 +35,16 @@
     "[json]": {
         "editor.formatOnSave": false
     },
-    "clangd.arguments": ["--header-insertion=never"],
+    "clangd.arguments": [
+        "--header-insertion=never",
+        // Let clangd extract the cross-compiler's built-in include paths so
+        // standard types (uint16_t, bool, ...) resolve for RP2040/AVR builds.
+        "--query-driver=/usr/bin/arm-none-eabi-gcc,/usr/bin/avr-gcc"
+    ],
+    // QMK uses clangd (see recommended extensions); disable the Microsoft
+    // C/C++ IntelliSense engine so the two don't produce conflicting squiggles.
+    // clangd reads compile_commands.json (regenerate via the QMK compiledb task).
+    "C_Cpp.intelliSenseEngine": "disabled",
     "json.schemas": [
         {
             "fileMatch": ["qmk.json"],

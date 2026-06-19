@@ -13,6 +13,8 @@ enum layers {
     U_NUM,
     U_SYM,
     U_FUN,
+    U_WIN,
+    U_WARROW,
 };
 
 // Tap dance: double-tap a layer's "you are here" key to set it as the default
@@ -129,6 +131,43 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_F10, KC_F1, KC_F2, KC_F3, KC_PAUS,            KC_NO,   TD(U_TD_U_FUN),   TD(U_TD_U_MEDIA), KC_ALGR,        KC_NO,
                        KC_APP, KC_SPC, KC_TAB,           KC_NO,   KC_NO,            KC_NO
     ),
+
+    // Hyprland window control: squeeze the Nav + Mouse thumbs (Tab + Enter) to
+    // hold it. Two orthogonal axes, with Super baked into every action key so it
+    // is never a live held modifier:
+    //   target axis  - pinky flips the right hand between the workspace numpad
+    //                  (default) and U_WARROW's arrows.
+    //   action axis  - index (Shift) upgrades "switch" to "move" in either.
+    // So, matching U_NUM's 7-8-9 / 4-5-6 / 1-2-3 numpad columns:
+    //   numpad alone           -> focus workspace            (Super+digit)
+    //   index (Shift) + numpad -> send window to workspace   (Super+Shift+digit)
+    //   pinky + arrow          -> focus window               (Super+arrow)
+    //   pinky + index + arrow  -> move window                (Super+Shift+arrow)
+    // Left top row = fullscreen / float / togglesplit / close. Release a thumb
+    // to drop back.
+    [U_WIN] = LAYOUT_split_3x5_3(
+        LGUI(KC_F),    LGUI(KC_V), LGUI(KC_J), LGUI(KC_Q), KC_NO,    KC_NO, LGUI(KC_7), LGUI(KC_8), LGUI(KC_9), KC_NO,
+        MO(U_WARROW),  KC_NO,      KC_NO,      KC_LSFT,    KC_NO,    KC_NO, LGUI(KC_4), LGUI(KC_5), LGUI(KC_6), KC_NO,
+        KC_NO,         KC_NO,      KC_NO,      KC_NO,      KC_NO,    KC_NO, LGUI(KC_1), LGUI(KC_2), LGUI(KC_3), KC_NO,
+                                   KC_NO,      KC_NO,      KC_NO,    KC_NO, KC_NO,      KC_NO
+    ),
+
+    // Arrow sub-layer for U_WIN: the right hand becomes the familiar Nav-style
+    // inverted-T with Super baked in (focus). The left index stays a plain Shift
+    // here too so adding it upgrades focus -> move regardless of press order.
+    [U_WARROW] = LAYOUT_split_3x5_3(
+        KC_NO,   KC_NO, KC_NO, KC_NO,   KC_NO,     KC_NO, KC_NO,         LGUI(KC_UP),   KC_NO,         KC_NO,
+        KC_TRNS, KC_NO, KC_NO, KC_LSFT, KC_NO,     KC_NO, LGUI(KC_LEFT), LGUI(KC_DOWN), LGUI(KC_RGHT), KC_NO,
+        KC_NO,   KC_NO, KC_NO, KC_NO,   KC_NO,     KC_NO, KC_NO,         KC_NO,         KC_NO,         KC_NO,
+                        KC_NO, KC_NO,   KC_NO,     KC_NO, KC_NO,         KC_NO
+    ),
+};
+
+// Squeeze the Nav + Mouse thumbs (Tab + Enter) to hold window mode; release to
+// return to base. Momentary, so both hands stay free for the numpad + arrows.
+const uint16_t PROGMEM win_combo[] = {LT(U_NAV, KC_TAB), LT(U_MOUSE, KC_ENT), COMBO_END};
+combo_t key_combos[] = {
+    COMBO(win_combo, MO(U_WIN)),
 };
 
 // Shift + Caps Word toggle = Caps Lock

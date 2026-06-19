@@ -23,7 +23,7 @@
         {
             "label": "QMK: Draw keymap diagram (skeletyl/barediver)",
             "type": "shell",
-            "command": "qmk c2json -kb bastardkb/skeletyl/promicro -km barediver -o docs/barediver.json && keymap parse -q docs/barediver.json -l Base Tap Button Nav Mouse Media Num Sym Fun > docs/barediver.keymap.yaml && keymap draw docs/barediver.keymap.yaml > docs/barediver.svg && rsvg-convert -z 1.5 -b white docs/barediver.svg -o docs/barediver.png",
+            "command": "qmk c2json -kb bastardkb/skeletyl/promicro -km barediver -o docs/barediver.json && keymap parse -q docs/barediver.json -l Base Tap Button Nav Mouse Media Num Sym Fun Win Arrows > docs/barediver.keymap.yaml && keymap draw docs/barediver.keymap.yaml > docs/barediver.svg && rsvg-convert -z 1.5 -b white docs/barediver.svg -o docs/barediver.png",
             "options": {
                 "cwd": "${workspaceFolder}/keyboards/bastardkb/skeletyl/keymaps/barediver"
             },

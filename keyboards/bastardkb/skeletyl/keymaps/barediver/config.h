@@ -10,6 +10,11 @@
 #define TAPPING_TERM 200
 #define QUICK_TAP_TERM 0
 
+// Combo timing: the window for both Tab+Enter thumbs to land together and enter
+// the window-control layer. Bumped above the 50ms default so the two-thumb
+// squeeze is more forgiving (cost: a bare Tab/Enter tap waits this long).
+#define COMBO_TERM 75
+
 // Home-row-mod hold detection.
 // CHORDAL_HOLD: a tap-hold key only holds when the next key is on the opposite
 //   hand (kills same-hand alpha-roll misfires). Same-hand modifier/layer chords

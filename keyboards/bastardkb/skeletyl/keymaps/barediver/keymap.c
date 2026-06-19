@@ -143,13 +143,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     //   index (Shift) + numpad -> send window to workspace   (Super+Shift+digit)
     //   pinky + arrow          -> focus window               (Super+arrow)
     //   pinky + index + arrow  -> move window                (Super+Shift+arrow)
-    // Left top row = fullscreen / float / togglesplit / close. Release a thumb
-    // to drop back.
+    // The Super+letter window actions sit on their base-layer letter keys:
+    // close=Q, fullscreen=F, float=V, togglesplit=J. Release a thumb to drop back.
     [U_WIN] = LAYOUT_split_3x5_3(
-        LGUI(KC_F),    LGUI(KC_V), LGUI(KC_J), LGUI(KC_Q), KC_NO,    KC_NO, LGUI(KC_7), LGUI(KC_8), LGUI(KC_9), KC_NO,
-        MO(U_WARROW),  KC_NO,      KC_NO,      KC_LSFT,    KC_NO,    KC_NO, LGUI(KC_4), LGUI(KC_5), LGUI(KC_6), KC_NO,
-        KC_NO,         KC_NO,      KC_NO,      KC_NO,      KC_NO,    KC_NO, LGUI(KC_1), LGUI(KC_2), LGUI(KC_3), KC_NO,
-                                   KC_NO,      KC_NO,      KC_NO,    KC_NO, KC_NO,      KC_NO
+        LGUI(KC_Q),   KC_NO, LGUI(KC_F), KC_NO,      KC_NO,        LGUI(KC_J), LGUI(KC_7), LGUI(KC_8), LGUI(KC_9), KC_NO,
+        MO(U_WARROW), KC_NO, KC_NO,      KC_LSFT,    KC_NO,        KC_NO,      LGUI(KC_4), LGUI(KC_5), LGUI(KC_6), KC_NO,
+        KC_NO,        KC_NO, KC_NO,      KC_NO,      LGUI(KC_V),   KC_NO,      LGUI(KC_1), LGUI(KC_2), LGUI(KC_3), KC_NO,
+                             KC_NO,      KC_NO,      KC_NO,        KC_NO,      KC_NO,      KC_NO
     ),
 
     // Arrow sub-layer for U_WIN: the right hand becomes the familiar Nav-style

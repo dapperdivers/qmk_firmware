@@ -103,9 +103,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
 
     [U_MEDIA] = LAYOUT_split_3x5_3(
-        RM_HUEU, RM_SATU, KC_VOLU, RM_VALU, RM_TOGG,     KC_NO,   TD(U_TD_U_BASE),  KC_NO,            TD(U_TD_U_TAP), TD(U_TD_BOOT),
-        RM_NEXT, KC_MPRV, KC_VOLD, KC_MNXT, KC_NO,       KC_NO,   KC_RSFT,          KC_RCTL,          KC_RALT,        KC_RGUI,
-        KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,       KC_NO,   TD(U_TD_U_MEDIA), TD(U_TD_U_FUN),   KC_ALGR,        KC_NO,
+        RM_HUEU, RM_SATU, RM_VALU, RM_SPDU, RM_TOGG,     KC_NO,   TD(U_TD_U_BASE),  KC_NO,            TD(U_TD_U_TAP), TD(U_TD_BOOT),
+        KC_MPRV, KC_VOLD, KC_VOLU, KC_MNXT, RM_NEXT,     KC_NO,   KC_RSFT,          KC_RCTL,          KC_RALT,        KC_RGUI,
+        RM_HUED, RM_SATD, RM_VALD, RM_SPDD, RM_PREV,     KC_NO,   TD(U_TD_U_MEDIA), TD(U_TD_U_FUN),   KC_ALGR,        KC_NO,
                           KC_MUTE, KC_MPLY, KC_MSTP,     KC_NO,   KC_NO,            KC_NO
     ),
 

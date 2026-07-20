@@ -15,6 +15,8 @@ enum layers {
     U_FUN,
     U_WIN,
     U_WARROW,
+    U_GAME,
+    U_GNUM,
 };
 
 // Tap dance: double-tap a layer's "you are here" key to set it as the default
@@ -30,6 +32,12 @@ enum {
     U_TD_U_NUM,
     U_TD_U_SYM,
     U_TD_U_FUN,
+};
+
+// Game mode toggle, fired by the Bspc+Del thumb combo (see key_combos): the
+// same squeeze enters and leaves game mode, from Base or Game alike.
+enum custom_keycodes {
+    U_GAMETOG = SAFE_RANGE,
 };
 
 void u_td_fn_boot(tap_dance_state_t *state, void *user_data) {
@@ -53,6 +61,14 @@ U_TD_LAYER(U_MEDIA)
 U_TD_LAYER(U_NUM)
 U_TD_LAYER(U_SYM)
 U_TD_LAYER(U_FUN)
+
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    if (keycode == U_GAMETOG && record->event.pressed) {
+        bool in_game = get_highest_layer(default_layer_state) == U_GAME;
+        default_layer_set((layer_state_t)1 << (in_game ? U_BASE : U_GAME));
+    }
+    return true;
+}
 
 tap_dance_action_t tap_dance_actions[] = {
     [U_TD_BOOT]      = ACTION_TAP_DANCE_FN(u_td_fn_boot),
@@ -161,13 +177,49 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_NO,   KC_NO, KC_NO, KC_NO,   KC_NO,     KC_NO, KC_NO,         KC_NO,         KC_NO,         KC_NO,
                         KC_NO, KC_NO,   KC_NO,     KC_NO, KC_NO,         KC_NO
     ),
+
+    // Game mode: the left half is QWERTY shifted one column right — the
+    // community-converged 3x5 gaming layout (see Miryoku discussion #158).
+    // Since the hand can't slide over a column like on a row-stagger board,
+    // the keymap slides instead: the pinky column becomes the classic
+    // Tab/Shift/Ctrl stack and WASD lands under ring/middle/index, matching a
+    // normal keyboard's gaming claw. All holds are plain keys — no tap-hold
+    // timing anywhere the left hand touches. The displaced inner column
+    // (T/G/B) plus numbers, Esc, and F-keys live on U_GNUM, held on the outer
+    // thumb. Right half keeps its QWERTY letters for chat, and the right
+    // thumbs keep their base layer-taps (never held in-game) so Mouse/Fun/
+    // Media stay reachable. Toggle game mode with the Bspc+Del thumb squeeze
+    // (game_combo); the whole board turns red while it is the default layer.
+    [U_GAME] = LAYOUT_split_3x5_3(
+        KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,        KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,
+        KC_LSFT, KC_A,    KC_S,    KC_D,    KC_F,        KC_H,    KC_J,    KC_K,    KC_L,    KC_QUOT,
+        KC_LCTL, KC_Z,    KC_X,    KC_C,    KC_V,        KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH,
+                     MO(U_GNUM), KC_LALT, KC_SPC,        LT(U_MOUSE,KC_ENT), LT(U_FUN,KC_BSPC), LT(U_MEDIA,KC_DEL)
+    ),
+
+    // Held from the game layer's outer left thumb: quickbar numbers 1-5 under
+    // the fingers (6-0 mirrored on the right), the displaced T/G/B on the
+    // left home row for chat words, Esc on the pinky home, and F1-F10 on the
+    // bottom rows. Double-tap Base (right home index) is a backup exit from
+    // game mode; Boot sits on the right pinky home for flashing.
+    [U_GNUM] = LAYOUT_split_3x5_3(
+        KC_1,    KC_2,    KC_3,    KC_4,    KC_5,        KC_6,    KC_7,    KC_8,    KC_9,    KC_0,
+        KC_ESC,  KC_T,    KC_G,    KC_B,    KC_NO,       KC_NO,   TD(U_TD_U_BASE), KC_NO, KC_NO, TD(U_TD_BOOT),
+        KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,       KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,
+                          KC_NO,   KC_NO,   KC_NO,       KC_ENT,  KC_NO,   KC_NO
+    ),
 };
 
 // Squeeze the Nav + Mouse thumbs (Tab + Enter) to hold window mode; release to
 // return to base. Momentary, so both hands stay free for the numpad + arrows.
 const uint16_t PROGMEM win_combo[] = {LT(U_NAV, KC_TAB), LT(U_MOUSE, KC_ENT), COMBO_END};
+// Squeeze the Fun + Media thumbs (Bspc + Del) to toggle game mode. The right
+// thumb cluster is identical on Base and Game, so the same squeeze works in
+// both directions — no mirrored gestures to remember.
+const uint16_t PROGMEM game_combo[] = {LT(U_FUN, KC_BSPC), LT(U_MEDIA, KC_DEL), COMBO_END};
 combo_t key_combos[] = {
     COMBO(win_combo, MO(U_WIN)),
+    COMBO(game_combo, U_GAMETOG),
 };
 
 // Shift + Caps Word toggle = Caps Lock
@@ -189,3 +241,17 @@ bool get_chordal_hold(uint16_t tap_hold_keycode, keyrecord_t *tap_hold_record,
     }
     return get_chordal_hold_default(tap_hold_record, other_record);
 }
+
+// Visual indicator for game mode: paint the whole board red while U_GAME is
+// the default layer, overriding the active RGB animation. Everything reverts
+// on its own when game mode is left. (Needs RGB not toggled off via RM_TOGG.)
+#ifdef RGB_MATRIX_ENABLE
+bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
+    if (get_highest_layer(default_layer_state) == U_GAME) {
+        for (uint8_t i = led_min; i < led_max; i++) {
+            rgb_matrix_set_color(i, RGB_RED);
+        }
+    }
+    return false;
+}
+#endif

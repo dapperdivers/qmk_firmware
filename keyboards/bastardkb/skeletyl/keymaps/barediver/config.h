@@ -10,9 +10,10 @@
 #define TAPPING_TERM 200
 #define QUICK_TAP_TERM 0
 
-// Combo timing: the window for both Tab+Enter thumbs to land together and enter
-// the window-control layer. Bumped above the 50ms default so the two-thumb
-// squeeze is more forgiving (cost: a bare Tab/Enter tap waits this long).
+// Combo timing: the window for a two-thumb squeeze to land together (Tab+Enter
+// -> window layer, Bspc+Del -> game-mode toggle). Bumped above the 50ms
+// default so the squeezes are more forgiving (cost: a bare tap on a combo key
+// waits this long).
 #define COMBO_TERM 75
 
 // Home-row-mod hold detection.
